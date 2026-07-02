@@ -6,14 +6,18 @@ Reclaim (a focus / attention app with an AI attention coach) *before* building i
 Working name "Reclaim" is a placeholder.
 
 ## Live
-Hosted on GitHub Pages → https://ksairi-org.github.io/reclaim
+GitHub Pages (Actions workflow) → https://reclaim.sytes.net · https://ksairi-org.github.io/reclaim
 
-## What to configure before running traffic
-See the comment block at the top of `index.html`:
-1. **Email capture** — replace `YOUR_FORMSPREE_ID` with a form id from [Formspree](https://formspree.io).
-2. **Analytics** — uncomment the Plausible snippet (or add GA4) to measure the funnel.
-3. **Price** — tweak the price in the CTAs / pricing card to test price sensitivity.
+## Tracking (built in — no config needed)
+The full funnel is captured to **Supabase** (`reflect-stg` → `public.reclaim_events`),
+inserted client-side with the publishable key (RLS allows INSERT only, so the page
+can write but not read — data is readable only via the service role):
+- `page_view` — on load (the denominator)
+- `pay_intent` — clicking the pricing "Start free trial" button (the key signal)
+- `lead` — email submit (waitlist), stored with the email
+
+Optional: A/B the price in the CTAs / pricing card to test price sensitivity.
 
 ## The metric that matters
-`pay_intent` clicks (the pricing "Start free trial" button) ÷ visitors.
-**>5–8% = strong willingness to pay.** Secondary: email signups ÷ visitors.
+`pay_intent` events ÷ `page_view` events. **>5–8% = strong willingness to pay.**
+Secondary: `lead` (emails) ÷ `page_view`.
