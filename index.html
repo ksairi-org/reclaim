@@ -81,7 +81,9 @@
   .price{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px;max-width:400px;width:100%;text-align:center;box-shadow:0 18px 40px -24px rgba(15,74,65,.4)}
   .price .amt{font-size:46px;font-weight:800;letter-spacing:-1px}
   .price .amt small{font-size:17px;font-weight:600;color:var(--ink-soft)}
-  .price .trial{color:var(--accent);font-weight:700;margin:6px 0 18px}
+  .price .anchor{color:var(--ink-soft);font-size:13.5px;margin:4px 0 0}
+  .price .anchor s{opacity:.6;margin-right:4px}
+  .price .trial{color:var(--accent);font-weight:700;margin:10px 0 18px}
   .price ul{list-style:none;text-align:left;margin:22px 0;display:inline-block}
   .price li{padding:7px 0;font-size:15px}
   .price li::before{content:"✓";color:var(--accent);font-weight:800;margin-right:10px}
@@ -177,7 +179,8 @@
     <p class="sub">Lock in the launch price forever. Cancel anytime.</p>
     <div class="price-wrap">
       <div class="price">
-        <div class="amt">$39<small>/year</small></div>
+        <div class="amt">$11.99<small>/year</small></div>
+        <div class="anchor"><s>$39</s> just $1/month, billed yearly</div>
         <div class="trial">7-day free trial</div>
         <ul>
           <li>Unlimited focus sessions &amp; app blocking</li>
@@ -187,7 +190,7 @@
         </ul>
         <!-- This button is the KEY conversion event. Clicking = "pay intent". -->
         <button class="btn big" data-cta="pricing" onclick="payIntent()">Start free trial</button>
-        <p class="muted" style="margin-top:14px;font-size:13px">Then $39/year. We'll email you the second it's ready.</p>
+        <p class="muted" style="margin-top:14px;font-size:13px">Then $11.99/year. We'll email you the second it's ready.</p>
       </div>
     </div>
 
@@ -240,7 +243,7 @@
 
   // 2) Pay-intent = clicking the pricing button — THE willingness-to-pay signal.
   function payIntent(){
-    logEvent("pay_intent", { meta: { plan: "yearly_39" } });
+    logEvent("pay_intent", { meta: { plan: "yearly_1199" } });
     var el = document.querySelector('#pricing form.capture input[type=email]');
     if(el){ el.focus(); el.scrollIntoView({behavior:"smooth", block:"center"}); }
   }
