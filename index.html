@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reclaim — Take back your attention</title>
+<meta name="description" content="Reclaim helps you focus: deep-work sessions that block distractions, a daily focus streak, and an AI coach that learns your attention patterns." />
+
+<!--
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │ VALIDATION LANDING PAGE — what to change before you run traffic:       │
+  │ 1) FORM: replace  YOUR_FORMSPREE_ID  (2 places) with a real form id    │
+  │    from https://formspree.io (free). Then real emails get captured.    │
+  │ 2) PRICE: change the price in the two CTA buttons + pricing card to    │
+  │    test different price points ($29.99 / $39 / $49 / $99 per year).    │
+  │ 3) ANALYTICS: uncomment the Plausible snippet below (or add GA4) so    │
+  │    you can measure the funnel. The KEY metric = "pay-intent" clicks    │
+  │    on the pricing button ÷ visitors. >5-8% = strong willingness to pay.│
+  └──────────────────────────────────────────────────────────────────────┘
+-->
+<!-- <script defer data-domain="YOURDOMAIN.com" src="https://plausible.io/js/script.js"></script> -->
+
+<style>
+  :root{
+    --ink:#14201e; --ink-soft:#42514e; --bg:#f6f4ef; --card:#ffffff;
+    --accent:#1f6f63; --accent-deep:#0f4a41; --gold:#c8a24a; --line:#e4e0d6;
+    --hero:#0f2420;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+  .serif{font-family:Georgia,"Times New Roman",serif}
+  a{color:inherit}
+  .btn{display:inline-block;background:var(--accent);color:#fff;font-weight:700;border:none;border-radius:12px;padding:15px 24px;font-size:16px;cursor:pointer;text-decoration:none;transition:transform .06s ease,background .2s}
+  .btn:hover{background:var(--accent-deep);transform:translateY(-1px)}
+  .btn.big{padding:17px 30px;font-size:17px}
+  .muted{color:var(--ink-soft)}
+  .center{text-align:center}
+
+  /* NAV */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .logo{font-weight:800;font-size:20px;letter-spacing:-.3px}
+  .logo span{color:var(--accent)}
+
+  /* HERO */
+  header{background:var(--hero);color:#eef3f1;padding:26px 0 78px;border-radius:0 0 28px 28px}
+  header .logo{color:#fff}
+  header nav a{color:#cdd8d4;text-decoration:none;font-size:14px}
+  .hero{padding-top:46px;text-align:center;max-width:720px;margin:0 auto}
+  .badge{display:inline-block;background:rgba(200,162,74,.16);color:var(--gold);border:1px solid rgba(200,162,74,.35);font-size:12.5px;font-weight:700;padding:5px 12px;border-radius:999px;margin-bottom:22px;letter-spacing:.2px}
+  .hero h1{font-size:46px;line-height:1.08;letter-spacing:-.5px;margin-bottom:18px}
+  .hero h1 em{color:var(--gold);font-style:italic}
+  .hero p.lead{font-size:19px;color:#c3d1cd;margin-bottom:30px}
+  form.capture{display:flex;gap:10px;max-width:460px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+  form.capture input[type=email]{flex:1;min-width:220px;border:none;border-radius:12px;padding:15px 16px;font-size:16px;background:#0b1b18;color:#fff;border:1px solid #23413b}
+  form.capture input[type=email]::placeholder{color:#7f938d}
+  .hero .fineprint{margin-top:14px;font-size:13px;color:#8fa39d}
+
+  /* SECTIONS */
+  section{padding:64px 0}
+  h2.title{font-size:32px;letter-spacing:-.4px;text-align:center;margin-bottom:10px}
+  .sub{text-align:center;font-size:17px;color:var(--ink-soft);max-width:620px;margin:0 auto 40px}
+
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}
+  .card .ic{font-size:26px;margin-bottom:12px}
+  .card h3{font-size:18px;margin-bottom:8px}
+  .card p{font-size:14.5px;color:var(--ink-soft)}
+
+  /* COACH HIGHLIGHT */
+  .coach{background:var(--hero);color:#eef3f1;border-radius:24px;padding:44px;display:grid;grid-template-columns:1.1fr 1fr;gap:34px;align-items:center}
+  .coach h2{font-size:28px;letter-spacing:-.3px;margin-bottom:14px}
+  .coach p{color:#c3d1cd;font-size:16px}
+  .coach .quote{background:#0b1b18;border:1px solid #23413b;border-radius:16px;padding:20px 22px}
+  .coach .quote .k{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.4px;text-transform:uppercase;margin-bottom:8px}
+  .coach .quote p{color:#dbe7e3;font-size:15.5px;font-style:italic}
+
+  /* PRICING */
+  .price-wrap{display:flex;justify-content:center}
+  .price{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px;max-width:400px;width:100%;text-align:center;box-shadow:0 18px 40px -24px rgba(15,74,65,.4)}
+  .price .amt{font-size:46px;font-weight:800;letter-spacing:-1px}
+  .price .amt small{font-size:17px;font-weight:600;color:var(--ink-soft)}
+  .price .trial{color:var(--accent);font-weight:700;margin:6px 0 18px}
+  .price ul{list-style:none;text-align:left;margin:22px 0;display:inline-block}
+  .price li{padding:7px 0;font-size:15px}
+  .price li::before{content:"✓";color:var(--accent);font-weight:800;margin-right:10px}
+  .price .btn{width:100%}
+
+  footer{padding:40px 0 60px;text-align:center;color:var(--ink-soft);font-size:13.5px}
+  .thanks{display:none;background:#0b1b18;border:1px solid #23413b;color:#eaf3f0;border-radius:12px;padding:14px 16px;max-width:460px;margin:14px auto 0;font-size:15px}
+
+  @media(max-width:720px){
+    .hero h1{font-size:34px}
+    .grid3{grid-template-columns:1fr}
+    .coach{grid-template-columns:1fr;padding:30px}
+    section{padding:48px 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="logo">Re<span>claim</span></div>
+      <a href="#pricing">Pricing</a>
+    </nav>
+
+    <div class="hero">
+      <div class="badge">EARLY ACCESS · FOUNDING MEMBER PRICING</div>
+      <h1 class="serif">Take back your <em>attention</em>.</h1>
+      <p class="lead">Deep-work sessions that block the noise, a focus streak that keeps you honest, and an AI coach that learns exactly where your focus leaks — and helps you fix it.</p>
+
+      <form class="capture" data-form onsubmit="return handleSubmit(event)">
+        <input type="email" name="email" placeholder="you@email.com" required aria-label="Email" />
+        <button class="btn" type="submit" data-cta="hero">Get early access</button>
+      </form>
+      <div class="thanks" data-thanks>You're on the list. 🙌 We'll email you the moment founding-member access opens.</div>
+      <p class="fineprint">Join the founding members. No spam — just launch news &amp; a discount.</p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PROBLEM ============ -->
+<section>
+  <div class="wrap center" style="max-width:680px">
+    <h2 class="title serif">You don't have a willpower problem.</h2>
+    <p class="sub">You have a phone engineered to take your attention. Blockers feel like punishment and you turn them off in a week. Reclaim is different: it builds a focus <em>habit</em> you actually keep — and an AI coach that makes it personal.</p>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="grid3">
+      <div class="card">
+        <div class="ic">🎯</div>
+        <h3>Focus sessions that block</h3>
+        <p>Start a session, pick what to silence, and the distractions are gone until you're done. A calm pause — not a brick wall — when you slip.</p>
+      </div>
+      <div class="card">
+        <div class="ic">🔥</div>
+        <h3>A streak you want to keep</h3>
+        <p>Every focused day builds your streak. A satisfying calendar that turns focus into a habit that sticks past week one.</p>
+      </div>
+      <div class="card">
+        <div class="ic">🧠</div>
+        <h3>Your AI attention coach</h3>
+        <p>Each week, a personal read on where your focus went — and one small experiment to try next. Like a coach who actually knows your patterns.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COACH HIGHLIGHT ============ -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="coach">
+      <div>
+        <h2 class="serif">An AI coach, not another dashboard.</h2>
+        <p>Most apps just show you numbers. Reclaim reads your week and tells you what to <em>do</em> — in plain language, tuned to your goals. That's what keeps you coming back, and what makes it worth paying for.</p>
+      </div>
+      <div class="quote">
+        <div class="k">Your week in focus</div>
+        <p>"You focused best before 11am — protect it. Your biggest leak was Instagram after 9pm (2h 40m). Try a wind-down block from 9pm this week; I'll check in Sunday."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING (the willingness-to-pay test) ============ -->
+<section id="pricing" style="background:#efece3">
+  <div class="wrap">
+    <h2 class="title serif">Founding member price</h2>
+    <p class="sub">Lock in the launch price forever. Cancel anytime.</p>
+    <div class="price-wrap">
+      <div class="price">
+        <div class="amt">$39<small>/year</small></div>
+        <div class="trial">7-day free trial</div>
+        <ul>
+          <li>Unlimited focus sessions &amp; app blocking</li>
+          <li>Focus streak &amp; full attention insights</li>
+          <li>Weekly AI attention coach</li>
+          <li>Founding-member price, locked forever</li>
+        </ul>
+        <!-- This button is the KEY conversion event. Clicking = "pay intent". -->
+        <button class="btn big" data-cta="pricing" onclick="payIntent()">Start free trial</button>
+        <p class="muted" style="margin-top:14px;font-size:13px">Then $39/year. We'll email you the second it's ready.</p>
+      </div>
+    </div>
+
+    <form class="capture" data-form onsubmit="return handleSubmit(event)" style="margin-top:34px">
+      <input type="email" name="email" placeholder="you@email.com" required aria-label="Email" />
+      <button class="btn" type="submit" data-cta="pricing-form">Reserve my spot</button>
+    </form>
+    <div class="thanks" data-thanks>Saved. 🙌 You'll get founding-member access first.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="margin-bottom:8px">Re<span style="color:var(--accent)">claim</span></div>
+    <p>Focus, without the willpower. · Coming soon.</p>
+  </div>
+</footer>
+
+<script>
+  // --- Analytics event helper: works with Plausible or GA4 if present, else logs. ---
+  function track(name, props){
+    try{
+      if(window.plausible) window.plausible(name, props ? {props} : undefined);
+      if(window.gtag) window.gtag('event', name, props||{});
+    }catch(e){}
+    console.log('[track]', name, props||'');
+  }
+
+  // The pricing button = the willingness-to-pay signal. Fire it, then nudge to email.
+  function payIntent(){
+    track('pay_intent', {plan: 'yearly_39'});
+    // Send them to reserve their spot (the email capture in the pricing section).
+    var forms = document.querySelectorAll('#pricing form.capture input[type=email]');
+    if(forms.length){ forms[0].focus(); forms[0].scrollIntoView({behavior:'smooth', block:'center'}); }
+  }
+
+  function handleSubmit(e){
+    var form = e.target;
+    var cta = form.querySelector('[data-cta]')?.getAttribute('data-cta') || 'form';
+    track('lead_submit', {source: cta});
+
+    // If a real Formspree id is set, let it POST normally (remove the return false).
+    var FORM_ID = 'YOUR_FORMSPREE_ID'; // <-- replace with your Formspree form id
+    if(FORM_ID && FORM_ID !== 'YOUR_FORMSPREE_ID'){
+      form.action = 'https://formspree.io/f/' + FORM_ID;
+      form.method = 'POST';
+      return true; // allow real submission
+    }
+
+    // No backend yet → show a thank-you so the page still "works" while testing.
+    e.preventDefault();
+    var thanks = form.parentElement.querySelector('[data-thanks]');
+    if(thanks){ thanks.style.display='block'; }
+    form.reset();
+    return false;
+  }
+</script>
+</body>
+</html>
