@@ -216,6 +216,8 @@
   var SUPABASE_KEY = "sb_publishable_QPQ2U_eVQsvlRsKFRQ37tw_NlZzjGHN";
 
   function logEvent(type, extra){
+    // Skip bots/crawlers/link-preview fetchers so the funnel stays honest.
+    if (/bot|crawl|spider|slurp|facebookexternalhit|meta-external|headless|preview|embed|scrape|lighthouse|pingdom|gtmetrix/i.test(navigator.userAgent)) return;
     var params = new URLSearchParams(location.search);
     var payload = Object.assign({
       type: type,
