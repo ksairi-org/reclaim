@@ -18,6 +18,22 @@
   To A/B price points, edit the CTA + pricing-card copy ($29.99 / $39 / $49 / $99).
 -->
 
+<!-- Meta Pixel — to run a CONVERSION-optimized campaign, create a Pixel in Meta
+     Events Manager and paste its ID over YOUR_PIXEL_ID below. Until then this is
+     a safe no-op. It fires: PageView (load), Lead (email), InitiateCheckout (price click). -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+window.RECLAIM_PIXEL_ID = 'YOUR_PIXEL_ID'; // <-- paste your Meta Pixel ID here
+if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
+  fbq('init', window.RECLAIM_PIXEL_ID);
+  fbq('track', 'PageView');
+}
+</script>
+
 <style>
   :root{
     --ink:#14201e; --ink-soft:#42514e; --bg:#f6f4ef; --card:#ffffff;
@@ -111,7 +127,7 @@
     </nav>
 
     <div class="hero">
-      <div class="badge">EARLY ACCESS · FOUNDING MEMBER PRICING</div>
+      <div class="badge">EARLY ACCESS · 50% OFF FOR FOUNDING MEMBERS</div>
       <h1 class="serif">Take back your <em>attention</em>.</h1>
       <p class="lead">Deep-work sessions that block the noise, a focus streak that keeps you honest, and an AI coach that learns exactly where your focus leaks — and helps you fix it.</p>
 
@@ -120,7 +136,7 @@
         <button class="btn" type="submit" data-cta="hero">Get early access</button>
       </form>
       <div class="thanks" data-thanks>You're on the list. 🙌 We'll email you the moment founding-member access opens.</div>
-      <p class="fineprint">Join the founding members. No spam — just launch news &amp; a discount.</p>
+      <p class="fineprint">Founding members lock in <strong style="color:#c3d1cd">50% off — just $1/month</strong> — and get in first. No spam.</p>
     </div>
   </div>
 </header>
@@ -218,6 +234,11 @@
   function logEvent(type, extra){
     // Skip bots/crawlers/link-preview fetchers so the funnel stays honest.
     if (/bot|crawl|spider|slurp|facebookexternalhit|meta-external|headless|preview|embed|scrape|lighthouse|pingdom|gtmetrix/i.test(navigator.userAgent)) return;
+    // Mirror conversion events to the Meta Pixel (for conversion-optimized campaigns)
+    if (window.fbq && window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
+      if (type === 'lead') fbq('track', 'Lead');
+      else if (type === 'pay_intent') fbq('track', 'InitiateCheckout');
+    }
     var params = new URLSearchParams(location.search);
     var payload = Object.assign({
       type: type,
