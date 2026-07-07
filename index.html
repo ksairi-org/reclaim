@@ -272,12 +272,21 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
   }
 
   // 3) Email capture (waitlist lead)
+  var __submittedEmails = {};
   function handleSubmit(e){
     e.preventDefault();
     var form = e.target;
     var input = form.querySelector('input[type=email]');
+    var email = input ? (input.value || '').trim().toLowerCase() : '';
     var cta = form.querySelector('[data-cta]') ? form.querySelector('[data-cta]').getAttribute('data-cta') : 'form';
-    logEvent("lead", { email: input ? input.value : null, source: cta });
+    var btn = form.querySelector('button[type=submit]');
+    // Dedupe: log a given email at most once per session (kills double-click dupes).
+    // Keep source = utm_source (meta/direct); record which form fired it in meta.form.
+    if (email && !__submittedEmails[email]) {
+      __submittedEmails[email] = true;
+      logEvent("lead", { email: email, meta: { form: cta } });
+    }
+    if (btn) { btn.disabled = true; btn.textContent = "Added ✓"; }
     var thanks = form.parentElement.querySelector('[data-thanks]');
     if(thanks){ thanks.style.display='block'; }
     form.reset();
