@@ -240,12 +240,18 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
       else if (type === 'pay_intent') fbq('track', 'InitiateCheckout');
     }
     var params = new URLSearchParams(location.search);
-    var payload = Object.assign({
+    extra = extra || {};
+    // Lightweight geo hint (no external call) so we can split paying market vs LATAM.
+    var geo = { lang: navigator.language || null };
+    try { geo.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || null; } catch (e) {}
+    var payload = {
       type: type,
       user_agent: navigator.userAgent,
       referrer: document.referrer || null,
-      source: params.get('utm_source') || params.get('ref') || null
-    }, extra || {});
+      source: params.get('utm_source') || params.get('ref') || null,
+      email: extra.email || null,
+      meta: Object.assign(geo, extra.meta || {})
+    };
     try{
       fetch(SUPABASE_URL + "/rest/v1/reclaim_events", {
         method: "POST",
