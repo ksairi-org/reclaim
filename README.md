@@ -6,7 +6,7 @@ Reclaim (a focus / attention app with an AI attention coach) *before* building i
 Working name "Reclaim" is a placeholder.
 
 ## Live
-GitHub Pages (Actions workflow) → https://reclaim.sytes.net · https://ksairi-org.github.io/reclaim
+GitHub Pages (Actions workflow) → https://reclaim.sytes.net · https://anicca-labs.github.io/reclaim
 
 ## Tracking (built in — no config needed)
 The full funnel is captured to **Supabase** (`reflect-stg` → `public.reclaim_events`),
