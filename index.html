@@ -330,13 +330,17 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
   (function(){
     var params = new URLSearchParams(location.search);
     if (params.get("paid") !== "1") return;
-    // Guard against a refresh double-counting the conversion.
+    // ALWAYS log the purchase to Supabase — never let a guard suppress the single most
+    // important event. A missed purchase (we'd wrongly conclude "nobody paid") is far worse
+    // than a rare duplicate row, which is trivial to dedupe in analysis.
+    logEvent("purchase", { meta: { plan: "yearly_1199", session_id: params.get("session_id") || null } });
+    // Fire the Meta Pixel Purchase at most once per browser session (a refresh shouldn't
+    // double-count the conversion to Meta).
     if (!sessionStorage.getItem("reclaim_purchased")) {
       sessionStorage.setItem("reclaim_purchased", "1");
       if (window.fbq && window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== "YOUR_PIXEL_ID") {
         fbq("track", "Purchase", { value: 11.99, currency: "USD" });
       }
-      logEvent("purchase", { meta: { plan: "yearly_1199", session_id: params.get("session_id") || null } });
     }
     var banner = document.getElementById("paid-banner");
     if (banner) { banner.style.display = "block"; }
