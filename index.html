@@ -236,6 +236,19 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
   var SUPABASE_URL = "https://sznlkorcninofgezkwmy.supabase.co";
   var SUPABASE_KEY = "sb_publishable_QPQ2U_eVQsvlRsKFRQ37tw_NlZzjGHN";
 
+  // First-touch attribution: persist the ad's utm_* so it survives the Stripe round-trip
+  // (the ?paid=1 return URL drops query params). Lets the purchase attribute to its campaign.
+  try {
+    var __p = new URLSearchParams(location.search);
+    if (__p.get('utm_source') || __p.get('utm_campaign')) {
+      localStorage.setItem('reclaim_attr', JSON.stringify({
+        source: __p.get('utm_source') || __p.get('ref') || null,
+        campaign: __p.get('utm_campaign') || null,
+        content: __p.get('utm_content') || null
+      }));
+    }
+  } catch (e) {}
+
   function logEvent(type, extra){
     // Skip bots/crawlers/link-preview fetchers so the funnel stays honest.
     if (/bot|crawl|spider|slurp|facebookexternalhit|meta-external|headless|preview|embed|scrape|lighthouse|pingdom|gtmetrix/i.test(navigator.userAgent)) return;
@@ -246,14 +259,19 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
     }
     var params = new URLSearchParams(location.search);
     extra = extra || {};
+    var attr = {};
+    try { attr = JSON.parse(localStorage.getItem('reclaim_attr') || '{}'); } catch (e) {}
     // Lightweight geo hint (no external call) so we can split paying market vs LATAM.
     var geo = { lang: navigator.language || null };
     try { geo.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || null; } catch (e) {}
+    // Campaign tag (URL first, else persisted first-touch) so each run's data is cleanly separable.
+    geo.campaign = params.get('utm_campaign') || attr.campaign || null;
+    geo.content = params.get('utm_content') || attr.content || null;
     var payload = {
       type: type,
       user_agent: navigator.userAgent,
       referrer: document.referrer || null,
-      source: params.get('utm_source') || params.get('ref') || null,
+      source: params.get('utm_source') || params.get('ref') || attr.source || null,
       email: extra.email || null,
       meta: Object.assign(geo, extra.meta || {})
     };
