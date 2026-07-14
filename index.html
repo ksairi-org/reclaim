@@ -118,6 +118,11 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
 </head>
 <body>
 
+<!-- Shown on return from Stripe (?paid=1) -->
+<div id="paid-banner" style="display:none;background:#0f4a41;color:#eef3f1;text-align:center;padding:14px 18px;font-weight:600;font-size:15px">
+  You're in! 🎉 Founding member — we'll email you the moment Reclaim is ready.
+</div>
+
 <!-- ============ HERO ============ -->
 <header>
   <div class="wrap">
@@ -197,7 +202,7 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
       <div class="price">
         <div class="amt">$11.99<small>/year</small></div>
         <div class="anchor"><s>$39</s> just $1/month, billed yearly</div>
-        <div class="trial">7-day free trial</div>
+        <div class="trial">Founding price — locked in before launch</div>
         <ul>
           <li>Unlimited focus sessions &amp; app blocking</li>
           <li>Focus streak &amp; full attention insights</li>
@@ -205,8 +210,8 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
           <li>Founding-member price, locked forever</li>
         </ul>
         <!-- This button is the KEY conversion event. Clicking = "pay intent". -->
-        <button class="btn big" data-cta="pricing" onclick="payIntent()">Start free trial</button>
-        <p class="muted" style="margin-top:14px;font-size:13px">Then $11.99/year. We'll email you the second it's ready.</p>
+        <button class="btn big" data-cta="pricing" onclick="payIntent()">Become a founding member</button>
+        <p class="muted" style="margin-top:14px;font-size:13px">$11.99/year, billed today · cancel anytime. We'll email you the moment it's ready.</p>
       </div>
     </div>
 
@@ -270,11 +275,15 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
   // 1) Page view (the denominator for conversion rates)
   logEvent("page_view");
 
+  // Real Stripe checkout — recurring $11.99/yr subscription.
+  var CHECKOUT_URL = "https://buy.stripe.com/7sYbJ3fJm3GB8ff5KWeIw02";
+
   // 2) Pay-intent = clicking the pricing button — THE willingness-to-pay signal.
+  //    Log InitiateCheckout, then hand off to real Stripe checkout.
   function payIntent(){
     logEvent("pay_intent", { meta: { plan: "yearly_1199" } });
-    var el = document.querySelector('#pricing form.capture input[type=email]');
-    if(el){ el.focus(); el.scrollIntoView({behavior:"smooth", block:"center"}); }
+    // Brief delay so the Pixel/Supabase beacons flush before we leave the page.
+    setTimeout(function(){ window.location.href = CHECKOUT_URL; }, 150);
   }
 
   // 3) Email capture (waitlist lead)
@@ -298,6 +307,22 @@ if (window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== 'YOUR_PIXEL_ID') {
     form.reset();
     return false;
   }
+
+  // 4) Purchase — Stripe redirects back with ?paid=1 after a successful subscribe.
+  (function(){
+    var params = new URLSearchParams(location.search);
+    if (params.get("paid") !== "1") return;
+    // Guard against a refresh double-counting the conversion.
+    if (!sessionStorage.getItem("reclaim_purchased")) {
+      sessionStorage.setItem("reclaim_purchased", "1");
+      if (window.fbq && window.RECLAIM_PIXEL_ID && window.RECLAIM_PIXEL_ID !== "YOUR_PIXEL_ID") {
+        fbq("track", "Purchase", { value: 11.99, currency: "USD" });
+      }
+      logEvent("purchase", { meta: { plan: "yearly_1199", session_id: params.get("session_id") || null } });
+    }
+    var banner = document.getElementById("paid-banner");
+    if (banner) { banner.style.display = "block"; }
+  })();
 </script>
 </body>
 </html>
